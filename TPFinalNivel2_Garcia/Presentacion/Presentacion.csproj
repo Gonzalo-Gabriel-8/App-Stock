@@ -63,6 +63,9 @@
     <EmbeddedResource Include="fmrAltaArticulo.resx">
       <DependentUpon>fmrAltaArticulo.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="fmrInicio.resx">
+      <DependentUpon>fmrInicio.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

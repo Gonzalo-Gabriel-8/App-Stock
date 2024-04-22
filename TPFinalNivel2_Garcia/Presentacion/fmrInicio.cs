@@ -16,5 +16,12 @@ namespace Presentacion
         {
             InitializeComponent();
         }
+
+        private void btnAgregarArticulo_Click(object sender, EventArgs e)
+        {
+            fmrAltaArticulo alta= new fmrAltaArticulo();
+
+            alta.ShowDialog();
+        }
     }
 }
