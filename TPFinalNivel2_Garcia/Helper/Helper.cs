@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Helper
 {
-    internal class Helper
+    public class Helper
     {
+       
+
     }
 }

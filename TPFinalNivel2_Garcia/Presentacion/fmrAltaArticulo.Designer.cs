@@ -36,14 +36,14 @@
             this.lblUrlImagen = new System.Windows.Forms.Label();
             this.lblPrecio = new System.Windows.Forms.Label();
             this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.txtMarca = new System.Windows.Forms.TextBox();
-            this.txtCategoria = new System.Windows.Forms.TextBox();
             this.txtUrlImagen = new System.Windows.Forms.TextBox();
             this.txtDescripcion = new System.Windows.Forms.TextBox();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.txtPrecio = new System.Windows.Forms.TextBox();
             this.btnAgregarArticulo = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
+            this.cboMarca = new System.Windows.Forms.ComboBox();
+            this.cboCategoria = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lblCodigo
@@ -116,20 +116,6 @@
             this.txtCodigo.Size = new System.Drawing.Size(176, 20);
             this.txtCodigo.TabIndex = 7;
             // 
-            // txtMarca
-            // 
-            this.txtMarca.Location = new System.Drawing.Point(157, 167);
-            this.txtMarca.Name = "txtMarca";
-            this.txtMarca.Size = new System.Drawing.Size(176, 20);
-            this.txtMarca.TabIndex = 8;
-            // 
-            // txtCategoria
-            // 
-            this.txtCategoria.Location = new System.Drawing.Point(157, 216);
-            this.txtCategoria.Name = "txtCategoria";
-            this.txtCategoria.Size = new System.Drawing.Size(176, 20);
-            this.txtCategoria.TabIndex = 9;
-            // 
             // txtUrlImagen
             // 
             this.txtUrlImagen.Location = new System.Drawing.Point(157, 275);
@@ -166,6 +152,7 @@
             this.btnAgregarArticulo.TabIndex = 14;
             this.btnAgregarArticulo.Text = "Aceptar";
             this.btnAgregarArticulo.UseVisualStyleBackColor = true;
+            this.btnAgregarArticulo.Click += new System.EventHandler(this.btnAgregarArticulo_Click);
             // 
             // btnCancelar
             // 
@@ -175,20 +162,39 @@
             this.btnCancelar.TabIndex = 15;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
+            // 
+            // cboMarca
+            // 
+            this.cboMarca.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboMarca.FormattingEnabled = true;
+            this.cboMarca.Location = new System.Drawing.Point(158, 161);
+            this.cboMarca.Name = "cboMarca";
+            this.cboMarca.Size = new System.Drawing.Size(176, 21);
+            this.cboMarca.TabIndex = 16;
+            // 
+            // cboCategoria
+            // 
+            this.cboCategoria.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboCategoria.FormattingEnabled = true;
+            this.cboCategoria.Location = new System.Drawing.Point(157, 211);
+            this.cboCategoria.Name = "cboCategoria";
+            this.cboCategoria.Size = new System.Drawing.Size(176, 21);
+            this.cboCategoria.TabIndex = 17;
             // 
             // fmrAltaArticulo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(445, 450);
+            this.Controls.Add(this.cboCategoria);
+            this.Controls.Add(this.cboMarca);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnAgregarArticulo);
             this.Controls.Add(this.txtPrecio);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.txtUrlImagen);
-            this.Controls.Add(this.txtCategoria);
-            this.Controls.Add(this.txtMarca);
             this.Controls.Add(this.txtCodigo);
             this.Controls.Add(this.lblPrecio);
             this.Controls.Add(this.lblUrlImagen);
@@ -200,6 +206,7 @@
             this.Name = "fmrAltaArticulo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Agregar nuevo articulo";
+            this.Load += new System.EventHandler(this.fmrAltaArticulo_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -215,13 +222,13 @@
         private System.Windows.Forms.Label lblUrlImagen;
         private System.Windows.Forms.Label lblPrecio;
         private System.Windows.Forms.TextBox txtCodigo;
-        private System.Windows.Forms.TextBox txtMarca;
-        private System.Windows.Forms.TextBox txtCategoria;
         private System.Windows.Forms.TextBox txtUrlImagen;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.TextBox txtPrecio;
         private System.Windows.Forms.Button btnAgregarArticulo;
         private System.Windows.Forms.Button btnCancelar;
+        private System.Windows.Forms.ComboBox cboMarca;
+        private System.Windows.Forms.ComboBox cboCategoria;
     }
 }
