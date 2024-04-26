@@ -17,23 +17,26 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.SetearConsulta("select Codigo, Nombre, ImagenUrl, Precio, A.Descripcion , C.Descripcion Categoria, M.Descripcion Marcas  from ARTICULOS A, CATEGORIAS C, MARCAS M  where A.Id = C.Id and M.Id= A.Id");
+                datos.SetearConsulta("SELECT A.Codigo, A.Nombre, A.ImagenUrl, A.Precio, A.Descripcion, COALESCE(C.Descripcion, 'Sin categoría') AS Categoria, COALESCE(M.Descripcion, 'Sin marca') AS Marcas, A.IdCategoria, A.IdMarca, A.Id FROM ARTICULOS A LEFT JOIN CATEGORIAS C ON A.IdCategoria = C.Id LEFT JOIN MARCAS M ON A.IdMarca = M.Id;");
                 datos.EjecutarLectura();
                 while (datos.Lector.Read())
                 {
                     Articulo aux = new Articulo();
-                    //aux.Id = (int)datos.Lector["Id"];
+                    aux.Id = (int)datos.Lector["Id"];
                     aux.Codigo = (string)datos.Lector["Codigo"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
+                    if (!datos.Lector.IsDBNull(datos.Lector.GetOrdinal("ImagenUrl")));
                     aux.ImagenUrl = (string)datos.Lector["ImagenUrl"];
                     aux.Precio = Convert.ToString(datos.Lector["Precio"]);
                     aux.Descripcion = Convert.ToString(datos.Lector["Descripcion"]);
 
                     /*---Traer Categoria---*/
                     aux.Categoria = new Categoria();
+                    aux.Categoria.Id = (int)datos.Lector["IdCategoria"];
                     aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
                     /*---Traer Marca---*/
                     aux.Marca = new Marca();
+                    aux.Marca.Id = (int)datos.Lector["IdMarca"];
                     aux.Marca.Descripcion = (string)datos.Lector["Marcas"];
 
                     lista.Add(aux);
@@ -47,8 +50,6 @@ namespace Negocio
 
                 throw;
             }
-
-
         }
 
         public void Agregar(Articulo nuevo)
@@ -77,9 +78,47 @@ namespace Negocio
             }
         }
 
-        public void Modificar(Articulo modificar)
+        public void Modificar(Articulo mod)
         {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.SetearConsulta(" update ARTICULOS set Codigo= @cod, Nombre= @nombre, Descripcion= @descripcion, IdMarca= @IdMarca, IdCategoria = @IdCategoria, ImagenUrl = @imagenUrl, Precio = @precio where Id = @Id");
+                datos.SetearParametros("@cod", mod.Codigo);
+                datos.SetearParametros("@nombre", mod.Nombre);
+                datos.SetearParametros("@descripcion", mod.Descripcion);
+                datos.SetearParametros("@IdMarca", mod.Marca.Id);
+                datos.SetearParametros("IdCategoria", mod.Categoria.Id);
+                datos.SetearParametros("@imagenUrl", mod.ImagenUrl);
+                datos.SetearParametros("@precio", mod.Precio);
+                datos.SetearParametros("@Id", mod.Id);
+                datos.EjecutarAccion();
+            }
+            catch (Exception ex)
+            {
 
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
+            }
+        }
+
+        public void Eliminar( int id)
+        {
+            try
+            {
+                AccesoDatos eDatos = new AccesoDatos();
+                eDatos.SetearConsulta("delete from ARTICULOS where id = @id");
+                eDatos.SetearParametros("@id", id);
+                eDatos.EjecutarAccion();
+            }
+            catch (Exception ex) 
+            {
+
+                throw ex;
+            }
         }
     }
 }
