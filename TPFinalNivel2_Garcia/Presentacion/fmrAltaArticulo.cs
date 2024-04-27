@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Dominio;
 using Negocio;
+using System.Configuration;
 
 namespace Presentacion
 {
     public partial class fmrAltaArticulo : Form
     {
         private Articulo articulo = null; 
-        
+
+        private OpenFileDialog archivo = null;
+
+
         public fmrAltaArticulo()
         {
             InitializeComponent();
@@ -76,8 +81,7 @@ namespace Presentacion
         }
 
         private void btnAgregarArticulo_Click(object sender, EventArgs e)
-        {
-            
+        {            
             ArticuloNegocio artnegocio = new ArticuloNegocio();
             
             try
@@ -104,18 +108,19 @@ namespace Presentacion
                     artnegocio.Agregar(articulo);
                     MessageBox.Show("Articulo agregado correctamente");
                 }
-
-                
-
+                /*--Guardado de imagen solo al agregar con validacion de archivo local---*/
+                if (archivo != null && !( txtUrlImagen.Text.ToUpper().Contains("HTTP")))
+                {
+                    File.Copy(archivo.FileName, ConfigurationManager.AppSettings["carpeta-imagen"] + archivo.SafeFileName);
+                }
                 
                 Close();
-
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.ToString());
             }
+            
         }
 
         private void txtUrlImagen_Leave(object sender, EventArgs e)
@@ -123,18 +128,30 @@ namespace Presentacion
             CargarImagen(txtUrlImagen.Text);
         }
         public void CargarImagen(string imagen)
-        {
-            
+        {           
             try
             {
                 pbxNuevoArt.Load(imagen);
             }
             catch (Exception)
             {
-
                 pbxNuevoArt.Load("https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=");
             }
 
+        }
+
+        private void btnA_Imagen_Click(object sender, EventArgs e)
+        {
+            /*---Abrir una ventana de dialogo---*/
+            archivo = new OpenFileDialog();
+
+            archivo.Filter= "jpg|*.jpg;| png|*.png";
+
+            if(archivo.ShowDialog()== DialogResult.OK )
+            {
+                txtUrlImagen.Text = archivo.FileName;
+                CargarImagen(archivo.FileName);                
+            }
         }
     }
 }

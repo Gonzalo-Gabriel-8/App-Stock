@@ -45,6 +45,7 @@
             this.cboMarca = new System.Windows.Forms.ComboBox();
             this.cboCategoria = new System.Windows.Forms.ComboBox();
             this.pbxNuevoArt = new System.Windows.Forms.PictureBox();
+            this.btnA_Imagen = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbxNuevoArt)).BeginInit();
             this.SuspendLayout();
             // 
@@ -116,14 +117,14 @@
             this.txtCodigo.Location = new System.Drawing.Point(157, 25);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(176, 20);
-            this.txtCodigo.TabIndex = 7;
+            this.txtCodigo.TabIndex = 0;
             // 
             // txtUrlImagen
             // 
             this.txtUrlImagen.Location = new System.Drawing.Point(157, 275);
             this.txtUrlImagen.Name = "txtUrlImagen";
             this.txtUrlImagen.Size = new System.Drawing.Size(176, 20);
-            this.txtUrlImagen.TabIndex = 10;
+            this.txtUrlImagen.TabIndex = 5;
             this.txtUrlImagen.Leave += new System.EventHandler(this.txtUrlImagen_Leave);
             // 
             // txtDescripcion
@@ -131,28 +132,28 @@
             this.txtDescripcion.Location = new System.Drawing.Point(157, 121);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(176, 20);
-            this.txtDescripcion.TabIndex = 11;
+            this.txtDescripcion.TabIndex = 2;
             // 
             // txtNombre
             // 
             this.txtNombre.Location = new System.Drawing.Point(157, 70);
             this.txtNombre.Name = "txtNombre";
             this.txtNombre.Size = new System.Drawing.Size(176, 20);
-            this.txtNombre.TabIndex = 12;
+            this.txtNombre.TabIndex = 1;
             // 
             // txtPrecio
             // 
             this.txtPrecio.Location = new System.Drawing.Point(157, 320);
             this.txtPrecio.Name = "txtPrecio";
             this.txtPrecio.Size = new System.Drawing.Size(176, 20);
-            this.txtPrecio.TabIndex = 13;
+            this.txtPrecio.TabIndex = 6;
             // 
             // btnAcptarArticulo
             // 
             this.btnAcptarArticulo.Location = new System.Drawing.Point(87, 406);
             this.btnAcptarArticulo.Name = "btnAcptarArticulo";
             this.btnAcptarArticulo.Size = new System.Drawing.Size(75, 23);
-            this.btnAcptarArticulo.TabIndex = 14;
+            this.btnAcptarArticulo.TabIndex = 7;
             this.btnAcptarArticulo.Text = "Aceptar";
             this.btnAcptarArticulo.UseVisualStyleBackColor = true;
             this.btnAcptarArticulo.Click += new System.EventHandler(this.btnAgregarArticulo_Click);
@@ -162,7 +163,7 @@
             this.btnCancelar.Location = new System.Drawing.Point(258, 406);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(75, 23);
-            this.btnCancelar.TabIndex = 15;
+            this.btnCancelar.TabIndex = 8;
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
@@ -174,7 +175,7 @@
             this.cboMarca.Location = new System.Drawing.Point(158, 161);
             this.cboMarca.Name = "cboMarca";
             this.cboMarca.Size = new System.Drawing.Size(176, 21);
-            this.cboMarca.TabIndex = 16;
+            this.cboMarca.TabIndex = 3;
             // 
             // cboCategoria
             // 
@@ -183,7 +184,7 @@
             this.cboCategoria.Location = new System.Drawing.Point(157, 211);
             this.cboCategoria.Name = "cboCategoria";
             this.cboCategoria.Size = new System.Drawing.Size(176, 21);
-            this.cboCategoria.TabIndex = 17;
+            this.cboCategoria.TabIndex = 4;
             // 
             // pbxNuevoArt
             // 
@@ -194,11 +195,23 @@
             this.pbxNuevoArt.TabIndex = 18;
             this.pbxNuevoArt.TabStop = false;
             // 
+            // btnA_Imagen
+            // 
+            this.btnA_Imagen.Location = new System.Drawing.Point(340, 275);
+            this.btnA_Imagen.Name = "btnA_Imagen";
+            this.btnA_Imagen.Size = new System.Drawing.Size(39, 21);
+            this.btnA_Imagen.TabIndex = 19;
+            this.btnA_Imagen.Text = "...";
+            this.btnA_Imagen.UseVisualStyleBackColor = true;
+            this.btnA_Imagen.Click += new System.EventHandler(this.btnA_Imagen_Click);
+            // 
             // fmrAltaArticulo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.MenuBar;
             this.ClientSize = new System.Drawing.Size(653, 450);
+            this.Controls.Add(this.btnA_Imagen);
             this.Controls.Add(this.pbxNuevoArt);
             this.Controls.Add(this.cboCategoria);
             this.Controls.Add(this.cboMarca);
@@ -216,6 +229,8 @@
             this.Controls.Add(this.lblDescripcion);
             this.Controls.Add(this.lblNombre);
             this.Controls.Add(this.lblCodigo);
+            this.MaximumSize = new System.Drawing.Size(669, 489);
+            this.MinimumSize = new System.Drawing.Size(669, 489);
             this.Name = "fmrAltaArticulo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Agregar nuevo articulo";
@@ -245,5 +260,6 @@
         private System.Windows.Forms.ComboBox cboMarca;
         private System.Windows.Forms.ComboBox cboCategoria;
         private System.Windows.Forms.PictureBox pbxNuevoArt;
+        private System.Windows.Forms.Button btnA_Imagen;
     }
 }

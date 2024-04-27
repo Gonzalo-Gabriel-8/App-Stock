@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio;
@@ -17,7 +18,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.SetearConsulta("SELECT A.Codigo, A.Nombre, A.ImagenUrl, A.Precio, A.Descripcion, COALESCE(C.Descripcion, 'Sin categoría') AS Categoria, COALESCE(M.Descripcion, 'Sin marca') AS Marcas, A.IdCategoria, A.IdMarca, A.Id FROM ARTICULOS A LEFT JOIN CATEGORIAS C ON A.IdCategoria = C.Id LEFT JOIN MARCAS M ON A.IdMarca = M.Id;");
+                datos.SetearConsulta("SELECT Codigo, Nombre, A.Descripcion, ImagenUrl, Precio, C.Descripcion as Descripcion_Categoria, M.Descripcion as Descripcion_Marca, A.Id From ARTICULOS A, CATEGORIAS C, MARCAS M Where C.Id = A.IdCategoria AND M.Id = A.IdMarca");
                 datos.EjecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -31,13 +32,12 @@ namespace Negocio
                     aux.Descripcion = Convert.ToString(datos.Lector["Descripcion"]);
 
                     /*---Traer Categoria---*/
-                    aux.Categoria = new Categoria();
-                    aux.Categoria.Id = (int)datos.Lector["IdCategoria"];
-                    aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
+                    aux.Categoria = new Categoria();                    
+                    aux.Categoria.Descripcion = (string)datos.Lector["Descripcion_Categoria"];
+
                     /*---Traer Marca---*/
-                    aux.Marca = new Marca();
-                    aux.Marca.Id = (int)datos.Lector["IdMarca"];
-                    aux.Marca.Descripcion = (string)datos.Lector["Marcas"];
+                    aux.Marca = new Marca();                    
+                    aux.Marca.Descripcion = (string)datos.Lector["Descripcion_Marca"];
 
                     lista.Add(aux);
                 }
@@ -57,9 +57,10 @@ namespace Negocio
             AccesoDatos datos= new AccesoDatos();
             try
             {
-                datos.SetearConsulta("insert into ARTICULOS(codigo, nombre, IdMarca, IdCategoria, ImagenUrl,Precio) values (@Codigo, @Nombre,@IdMarca,@IdCategoria,@UrlImagen,@Precio)");
+                datos.SetearConsulta("insert into ARTICULOS(codigo, nombre, descripcion, IdMarca, IdCategoria, ImagenUrl,Precio) values (@Codigo, @Nombre, @desc, @IdMarca,@IdCategoria,@UrlImagen,@Precio)");
                 datos.SetearParametros("@Codigo", nuevo.Codigo);
                 datos.SetearParametros("@Nombre", nuevo.Nombre);
+                datos.SetearParametros("@desc", nuevo.Descripcion);
                 datos.SetearParametros("@IdMarca", nuevo.Marca.Id);
                 datos.SetearParametros("@IdCategoria", nuevo.Categoria.Id);
                 datos.SetearParametros("@UrlImagen", nuevo.ImagenUrl);
@@ -119,6 +120,102 @@ namespace Negocio
 
                 throw ex;
             }
+        }
+
+        public List<Articulo> filtar(string campo, string criterio, string filtro)
+        {
+            List<Articulo> lista = new List<Articulo>();
+
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                string consulta = "SELECT Codigo, Nombre, A.Descripcion, ImagenUrl, Precio, C.Descripcion as Descripcion_Categoria, M.Descripcion as Descripcion_Marca, A.Id From ARTICULOS A, CATEGORIAS C, MARCAS M Where C.Id = A.IdCategoria AND M.Id = A.IdMarca AND";
+
+               
+                if (campo == "Nombre")
+                {
+                    switch (criterio)
+                    {
+                        case "Comienza con: ":
+                            consulta += " Nombre like '" + filtro + "%'";
+                            break;
+
+                        case "Termina con: ":
+                            consulta += " Nombre like '%" + filtro + "'";
+                            break;
+
+                        default:
+                            consulta += " Nombre like '%" + filtro + "%'";
+                            break;
+                    }
+                }
+                else if(campo== "A.Descripcion")
+                {
+                    switch (criterio)
+                    {
+                        case "Comienza con: ":
+                            consulta += " A.Descripcion like '" + filtro + "%'";
+                            break;
+
+                        case "Termina con: ":
+                            consulta += " A.Descripcion like '%" + filtro + "'"; 
+                            break;
+
+                        default:
+                            consulta += " A.Descripcion like '%" + filtro + "%'";
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (criterio)
+                    {
+                        case "Comienza con: ":
+                            consulta += " Descripcion like '" + filtro + "%'";
+                            break;
+
+                        case "Termina con: ":
+                            consulta += " A.Descripcion like '%" + filtro + "'";
+                            break;
+
+                        default:
+                            consulta += " A.Descripcion like '%" + filtro + "%'";
+                            break;
+                    }
+                }
+                datos.SetearConsulta( consulta );
+                datos.EjecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    Articulo aux = new Articulo();
+                    aux.Id = (int)datos.Lector["Id"];
+                    aux.Codigo = (string)datos.Lector["Codigo"];
+                    aux.Nombre = (string)datos.Lector["Nombre"];
+                    if (!datos.Lector.IsDBNull(datos.Lector.GetOrdinal("ImagenUrl"))) ;
+                    aux.ImagenUrl = (string)datos.Lector["ImagenUrl"];
+                    aux.Precio = Convert.ToString(datos.Lector["Precio"]);
+                    aux.Descripcion = Convert.ToString(datos.Lector["Descripcion"]);
+
+                    /*---Traer Categoria---*/
+                    aux.Categoria = new Categoria();
+                    aux.Categoria.Descripcion = (string)datos.Lector["Descripcion_Categoria"];
+
+                    /*---Traer Marca---*/
+                    aux.Marca = new Marca();
+                    aux.Marca.Descripcion = (string)datos.Lector["Descripcion_Marca"];
+
+                    lista.Add(aux);
+                }
+                return lista;
+
+            }
+                
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            
         }
     }
 }

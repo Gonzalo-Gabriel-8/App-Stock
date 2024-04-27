@@ -7,10 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using Dominio;
 using Negocio;
-using Helper;
+
 
 
 namespace Presentacion
@@ -24,6 +23,7 @@ namespace Presentacion
         public fmrArticulos()
         {
             InitializeComponent();
+            ActualizarGrilla();
         }
 
         private void btnAgregarArticulo_Click(object sender, EventArgs e)
@@ -31,6 +31,8 @@ namespace Presentacion
             fmrAltaArticulo alta= new fmrAltaArticulo();
 
             alta.ShowDialog();
+
+            ActualizarGrilla();
         }
 
         
@@ -38,9 +40,9 @@ namespace Presentacion
         private void fmrArticulos_Load(object sender, EventArgs e)
         {
             ActualizarGrilla();
-
-            /*---Carga de la imagen en el PictureBox---*/
-            //pbxArticulo.Load(listaArticulo[0].ImagenUrl);
+            /*---Precargar en el load el desplegable de busqueda avanzada---*/
+            cboCampo.Items.Add("Nombre");
+            cboCampo.Items.Add("Descripciòn");           
         }
 
         private void dgvArticulos_SelectionChanged(object sender, EventArgs e)
@@ -59,7 +61,6 @@ namespace Presentacion
             }
             catch (Exception)
             {
-
                 pbxArticulo.Load("https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM=");
             }
 
@@ -74,7 +75,6 @@ namespace Presentacion
             fmrAltaArticulo modificar= new fmrAltaArticulo(seleccionado);
             modificar.ShowDialog();
             ActualizarGrilla();
-
         }
 
         private void ActualizarGrilla()
@@ -86,12 +86,9 @@ namespace Presentacion
                 dgvArticulos.DataSource = listaArticulo;
                 OultarColumnaImagen();
                 OultarColumnaId();
-
-
             }
             catch (Exception ex)
             {
-
                 MessageBox.Show(ex.ToString());
             }
         }
@@ -120,6 +117,81 @@ namespace Presentacion
                     ActualizarGrilla();
                 }
                 
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
+        }
+
+        private void txtBusquedaRapida_TextChanged(object sender, EventArgs e)
+        {
+            List<Articulo> ListaFiltrada = new List<Articulo>();
+            string filtro = txtBusquedaRapida.Text;
+
+            if(filtro.Length >= 3)
+            {
+                ListaFiltrada= listaArticulo.FindAll(x => x.Nombre.ToLower().Contains(filtro.ToLower()) || x.Marca.Descripcion.ToUpper().Contains(filtro.ToUpper()));
+            }
+            else
+            {
+                ListaFiltrada=listaArticulo;
+            }
+            dgvArticulos.DataSource = null;
+            dgvArticulos.DataSource= ListaFiltrada;
+        }
+
+        private void cboCampo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string opciones= cboCampo.SelectedItem.ToString();
+                        
+            if (opciones == "Nombre")
+            {
+                cboCriterio.Items.Clear();
+                cboCriterio.Items.Add("Comienza con:");
+                cboCriterio.Items.Add("Termina con:");
+                cboCriterio.Items.Add("Contiene");
+            }
+            else
+            {
+                cboCriterio.Items.Clear();
+                cboCriterio.Items.Add("Comienza con:");
+                cboCriterio.Items.Add("Termina con:");
+                cboCriterio.Items.Add("Contiene");
+            }
+        }
+        private bool ValidarFiltro()
+        {
+            if(cboCampo.SelectedIndex == -1)
+            {
+                MessageBox.Show("Seleccione el campo para filtrar");
+                return true;
+            }
+            if(cboCriterio.SelectedIndex == -1)
+            {
+                MessageBox.Show("Seleccione el criterio para filtrar");
+                return true;
+            }
+            return false;
+        }
+
+        private void btnBuscar_Click(object sender, EventArgs e) 
+        {
+            ArticuloNegocio negocio= new ArticuloNegocio();
+            try
+            {
+               if(ValidarFiltro())
+                {
+                    return;
+                }
+                string campo = cboCampo.SelectedItem.ToString();
+
+                string criterio = cboCriterio.SelectedItem.ToString();
+
+                string filtro = txtBusquedaParametros.Text;
+
+                dgvArticulos.DataSource= negocio.filtar(campo, criterio, filtro);
             }
             catch (Exception ex)
             {
